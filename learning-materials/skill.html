@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概念学习：Skill（技能）</title>
+<style>
+:root{--ink:#1f2430;--muted:#6b7280;--line:#e5e7eb;--bg:#f8f9fb;--card:#fff;--ac:#534AB7;--ac-soft:#EEEDFE;--ac-ink:#3C3489}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.8 -apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:800px;margin:0 auto;padding:48px 24px 72px}
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:28px}
+.kicker{font-size:12px;letter-spacing:.18em;color:var(--ac);font-weight:500;margin-bottom:10px}
+h1{font-size:30px;line-height:1.3;margin-bottom:6px}
+.tagline{font-size:15px;color:var(--muted)}
+.meta{margin-top:14px;font-size:12.5px;color:var(--muted)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 30px;margin-bottom:18px}
+h2{font-size:18px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+h2 .no{flex:none;width:26px;height:26px;border-radius:7px;background:var(--ac);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+h3{font-size:15px;margin:18px 0 8px}
+ul,ol{padding-left:1.4em}
+li{margin:7px 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;line-height:1.6}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--ac-soft);color:var(--ac-ink)}
+.personal{background:var(--ac-soft);border-left:3px solid var(--ac);border-radius:0 10px 10px 0;padding:18px 22px}
+details{border:1px solid var(--line);border-radius:9px;padding:12px 16px;margin:10px 0;background:#fff}
+summary{cursor:pointer;font-weight:500}
+details[open]{background:var(--ac-soft)}
+.badge{display:inline-block;font-size:11.5px;color:#fff;background:var(--ac);border-radius:4px;padding:1px 8px;margin-right:8px;vertical-align:1px}
+a{color:var(--ac-ink);word-break:break-all}
+.q{font-weight:500;margin:16px 0 6px}
+.note{font-size:13.5px;color:var(--muted);background:var(--bg);border-radius:8px;padding:10px 14px;margin-top:14px}
+footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+code{background:var(--ac-soft);color:var(--ac-ink);border-radius:4px;padding:1px 6px;font-size:.9em}
+pre{background:#f4f4f8;border:1px solid var(--line);border-radius:8px;padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.6;margin:12px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">概念学习资料 · 03 / 03 · 由 CONCEPT-LEARNING SKILL 生成</div>
+  <h1>Skill（技能）</h1>
+  <p class="tagline">把"这件事经常这么做"的经验固化成文件夹，让 AI 按需翻阅的可复用操作手册</p>
+  <p class="meta">学习主题：Skill ｜ 生成日期：2026-09-08 ｜ 初稿由 AI 按 Skill 流程生成，经作者核查（记录见仓库 README）</p>
+</header>
+
+<section>
+  <h2><span class="no">1</span>学习目标</h2>
+  <ol>
+    <li>能解释 Skill 解决什么问题、由哪些部分组成</li>
+    <li>能描述渐进式披露（progressive disclosure）的<b>三层加载机制</b>，并说明它为什么省上下文</li>
+    <li>能区分项目级与用户级 Skill，并判断一个任务是否值得沉淀为 Skill</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="no">2</span>核心问题</h2>
+  <ul>
+    <li>为什么不把所有用法说明直接写进系统提示词？</li>
+    <li>Skill 和"保存一段提示词模板"有什么本质区别？</li>
+    <li>本次作业为什么要求做成 Skill，而不是写一段一次性提示词？</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">3</span>我的解释</h2>
+  <div class="personal">
+    <p>Skill 是把"这件事我经常让你做、而且每次做法都一样"的经验从对话里搬出来，固化成一个文件夹：一份 SKILL.md 写清楚<b>何时触发、按什么步骤做</b>，旁边还可以放脚本和参考资料。</p>
+    <p>最妙的设计是"渐进式披露"——AI 平时只记每个 Skill 的一行简介（几乎不占上下文），真正遇到匹配的任务才翻开整本说明书，引用到的附件才按需去读。它像给 AI 配了一本"可扩展操作手册"。我这次亲手写的 concept-learning 就是例子：把我"先查证来源、再结构化输出、最后自测"的学习流程沉淀成工具，以后学任何新概念，一句话就能启动同一套严谨流程。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">4</span>核心机制与组成</h2>
+
+  <h3>Skill 的解剖</h3>
+  <p>一个 Skill 本质上是一个目录，核心是 <code>SKILL.md</code>（YAML 元数据 + Markdown 指令正文），可选地带脚本、参考文档和模板资源：</p>
+<pre>
+my-skill/
+├── SKILL.md        ← 必须：元数据（name、description）+ 指令正文
+├── scripts/        ← 可选：可执行脚本
+├── references/     ← 可选：参考文档
+└── assets/         ← 可选：模板、资源
+</pre>
+
+  <h3>渐进式披露：三层加载</h3>
+  <table>
+    <tr><th>层级</th><th>加载时机</th><th>内容</th><th>Token 开销</th></tr>
+    <tr><td>第 1 层 · 元数据</td><td>启动时，常驻系统提示</td><td>每个 Skill 的 name + description</td><td>约 100 token/个</td></tr>
+    <tr><td>第 2 层 · 指令</td><td>任务匹配、Skill 被触发时</td><td>SKILL.md 正文</td><td>建议 &lt; 5K token</td></tr>
+    <tr><td>第 3 层 · 资源</td><td>正文引用到才读取</td><td>参考文档、脚本（脚本只回传输出，代码本身不进上下文）</td><td>访问前为零</td></tr>
+  </table>
+  <p class="note">这正是它能与上下文协作的关键：装几百个 Skill，Agent 平时只"知道它们存在"（第 1 层的元数据总开销很小），用到哪个才展开哪个——上下文这张"桌子"不会被闲置的手册占满（对照阅读：本仓库 llm-context.html）。</p>
+
+  <h3>两级存放</h3>
+  <table>
+    <tr><th>层级</th><th>目录</th><th>适用</th></tr>
+    <tr><td>项目级</td><td><code>{仓库}/.workbuddy/skills/</code></td><td>随 git 仓库走，团队/课程共享——<b>本 Skill 所在位置</b></td></tr>
+    <tr><td>用户级</td><td><code>~/.workbuddy/skills/</code></td><td>个人全局，所有项目可用</td></tr>
+  </table>
+
+  <h3>开放标准</h3>
+  <p>Skill 的格式源自 Anthropic 的 Agent Skills（2025 年 10 月推出），同年 12 月发布为开放标准，已获 Claude Code、Cursor、VS Code Copilot、Codex CLI 等十余种工具支持；WorkBuddy 的技能体系与该规范同源兼容——本仓库的 Skill 在两类工具里都能用。</p>
+</section>
+
+<section>
+  <h2><span class="no">5</span>应用场景：本仓库就是自证</h2>
+  <p>没有 concept-learning 之前，每学一个新概念都要重新交代一遍要求："要有学习目标、要有核心问题、来源必须真实、要附自测题……"。有了它，一句"用 concept-learning 学习 X"就启动整套流程——本仓库的三份资料就是这么产出的：<b>Skill 是模具，资料是翻模件</b>。</p>
+  <p>而且因为它放在项目级目录、随 git 仓库走：任何人克隆这个仓库、在 WorkBuddy 里打开它，都能用同一个模具继续生产新的学习资料。这就是"沉淀可复用的任务知识"的含义——流程知识不再散落在某次对话里，而是变成了仓库里可版本管理的资产。</p>
+</section>
+
+<section>
+  <h2><span class="no">6</span>概念辨析与边界</h2>
+  <table>
+    <tr><th>容易混淆的对象</th><th>区别在哪</th></tr>
+    <tr><td><b>提示词模板</b></td><td>模板是"一段文字"；Skill 是"说明书 + 脚本 + 参考资料"的目录组织体：能执行代码、能按需加载、能进 git 版本管理</td></tr>
+    <tr><td><b>MCP / 插件</b></td><td>MCP 解决"连得上"（外部系统的接入协议）；Skill 解决"做得好"（任务知识的封装）。一个递工具，一个教方法</td></tr>
+    <tr><td><b>微调 / 训练</b></td><td>Skill 不改模型权重，只是运行时"递到手边的操作手册"，随时可改、可撤、可分享</td></tr>
+  </table>
+  <h3>使用边界</h3>
+  <ul>
+    <li>适合<b>高频、重复、流程可固化</b>的任务模式；一次性任务直接对话更划算</li>
+    <li>判断口诀：当你<b>第二次</b>对 AI 说同样的要求时，就该考虑写成 Skill 了</li>
+    <li>SKILL.md 的 description 要写清触发场景——写得太泛会导致误触发，写得太窄又会漏触发</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">7</span>自测</h2>
+  <p class="q">1.（简答）渐进式披露分哪三层？为什么这个设计能省上下文？</p>
+  <details><summary>参考答案</summary><p>元数据（启动常驻）→ 指令正文（触发才载入）→ 参考资源（引用才读取，脚本只回传输出）。未触发的 Skill 只占约 100 token，大块内容只在需要时进入上下文，因此装很多 Skill 也不会挤爆窗口。</p></details>
+  <p class="q">2.（选择）想让技能随仓库共享给他人使用，应放在？　A. 用户级 ~/.workbuddy/skills/　B. 项目级 .workbuddy/skills/　C. 任意文件夹　D. 桌面</p>
+  <details><summary>参考答案</summary><p>B。项目级技能随 git 仓库分发，克隆即可获得。</p></details>
+  <p class="q">3.（判断）Skill 和 MCP 是一回事，都是给 AI 接外部工具。</p>
+  <details><summary>参考答案</summary><p>错。MCP 是连接外部系统的协议（解决"连得上"）；Skill 是封装任务知识的方法论（解决"做得好"）。</p></details>
+  <p class="q">4.（简答）什么样的任务值得沉淀成 Skill？</p>
+  <details><summary>参考答案</summary><p>要点：高频重复出现、做法能固化成明确步骤、希望跨会话/跨人复用——例如本作业的资料生成流程。</p></details>
+</section>
+
+<section>
+  <h2><span class="no">8</span>参考来源（均经检索验证）</h2>
+  <ol>
+    <li><span class="badge">官方工程博客</span><a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">Equipping agents for the real world with Agent Skills — Anthropic</a><br>Skill 的解剖、渐进式披露三层设计原理、开放标准动态。原文金句："为 Agent 建 Skill，就像给新员工写入职手册。"</li>
+    <li><span class="badge">官方文档（中文）</span><a href="https://platform.claude.com/docs/zh-CN/agents-and-tools/agent-skills/overview">Agent Skills 概述 — Claude Platform 文档</a><br>三层加载的 token 成本表；脚本经命令执行、只有输出进入上下文。</li>
+    <li><span class="badge">开放标准</span><a href="http://skill.md/">Agent Skills 开放标准官网</a><br>SKILL.md 格式规范、目录结构与支持工具列表。</li>
+    <li><span class="badge">WorkBuddy 官方文档</span><a href="https://www.workbuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Skills-Market">技能 — WorkBuddy 使用指南</a><br>技能的安装、启用与创建流程；Skill 与专家、专家团的定位差异。</li>
+  </ol>
+</section>
+
+<footer>
+  本资料由 <b>concept-learning Skill</b> 按其固定流程生成初稿（来源经检索验证）· 作者人工核查与修改记录见仓库 README ｜ concept-learning-lab
+</footer>
+
+</div>
+</body>
+</html>

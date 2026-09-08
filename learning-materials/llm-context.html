@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>概念学习：大模型的上下文（Context）</title>
+<style>
+:root{--ink:#1f2430;--muted:#6b7280;--line:#e5e7eb;--bg:#f8f9fb;--card:#fff;--ac:#0F6E56;--ac-soft:#E1F5EE;--ac-ink:#085041}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font:16px/1.8 -apple-system,"PingFang SC","Microsoft YaHei","Segoe UI",sans-serif;color:var(--ink);background:var(--bg)}
+.wrap{max-width:800px;margin:0 auto;padding:48px 24px 72px}
+header{border-bottom:2px solid var(--ink);padding-bottom:20px;margin-bottom:28px}
+.kicker{font-size:12px;letter-spacing:.18em;color:var(--ac);font-weight:500;margin-bottom:10px}
+h1{font-size:30px;line-height:1.3;margin-bottom:6px}
+.tagline{font-size:15px;color:var(--muted)}
+.meta{margin-top:14px;font-size:12.5px;color:var(--muted)}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:26px 30px;margin-bottom:18px}
+h2{font-size:18px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+h2 .no{flex:none;width:26px;height:26px;border-radius:7px;background:var(--ac);color:#fff;font-size:13px;display:flex;align-items:center;justify-content:center}
+h3{font-size:15px;margin:18px 0 8px}
+ul,ol{padding-left:1.4em}
+li{margin:7px 0}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;line-height:1.6}
+th,td{border:1px solid var(--line);padding:9px 12px;text-align:left;vertical-align:top}
+th{background:var(--ac-soft);color:var(--ac-ink)}
+.personal{background:var(--ac-soft);border-left:3px solid var(--ac);border-radius:0 10px 10px 0;padding:18px 22px}
+details{border:1px solid var(--line);border-radius:9px;padding:12px 16px;margin:10px 0;background:#fff}
+summary{cursor:pointer;font-weight:500}
+details[open]{background:var(--ac-soft)}
+.badge{display:inline-block;font-size:11.5px;color:#fff;background:var(--ac);border-radius:4px;padding:1px 8px;margin-right:8px;vertical-align:1px}
+a{color:var(--ac-ink);word-break:break-all}
+.q{font-weight:500;margin:16px 0 6px}
+.note{font-size:13.5px;color:var(--muted);background:var(--bg);border-radius:8px;padding:10px 14px;margin-top:14px}
+footer{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+code{background:var(--ac-soft);color:var(--ac-ink);border-radius:4px;padding:1px 6px;font-size:.9em}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">概念学习资料 · 02 / 03 · 由 CONCEPT-LEARNING SKILL 生成</div>
+  <h1>大模型的上下文（Context）</h1>
+  <p class="tagline">模型每次回答时能"看到"的全部信息——既是工作记忆，也是稀缺资源</p>
+  <p class="meta">学习主题：大模型的上下文 ｜ 生成日期：2026-09-08 ｜ 初稿由 AI 按 Skill 流程生成，经作者核查（记录见仓库 README）</p>
+</header>
+
+<section>
+  <h2><span class="no">1</span>学习目标</h2>
+  <ol>
+    <li>能解释上下文窗口是什么、以什么计量、目前大致什么量级</li>
+    <li>能列出一次对话中上下文的<b>组成部分</b>，并说明每部分从哪来</li>
+    <li>能描述上下文影响 AI 表现的三种方式（截断、注意力稀释、位置偏差），并说出至少两种管理策略</li>
+  </ol>
+</section>
+
+<section>
+  <h2><span class="no">2</span>核心问题</h2>
+  <ul>
+    <li>为什么新开一个对话，AI 就"忘了"之前聊过的所有内容？</li>
+    <li>把 50 页资料全部塞给 AI，它为什么反而答得更差？</li>
+    <li>大家说的"上下文工程"到底在工程什么？</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">3</span>我的解释</h2>
+  <div class="personal">
+    <p>我把上下文理解为"大模型答题时桌面上摊开的所有材料"。每次我发一条消息，模型看到的从来不只是这一句话，而是整张桌子：系统设定、之前的对话、我上传的文档、工具返回的结果——全部同时摊在它眼前。它答得好不好，很大程度取决于桌上的材料<b>齐不齐、摆放有没有条理</b>。</p>
+    <p>这张桌子有两个特点让我印象很深：一是<b>大小有限</b>（上下文窗口），塞太满反而互相干扰，重要的东西被淹没；二是<b>每次对话结束桌子就会被清空</b>——它并不真的"记得"我。所谓"记得"，只是这次会话里材料还在桌上而已。</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="no">4</span>核心机制与组成</h2>
+
+  <h3>怎么计量：token</h3>
+  <p>上下文以 token 计量：英文约 4 个字符 ≈ 1 个 token；中文一个汉字通常折合 1~2 个 token。主流模型的窗口已从早期的 4K~32K 扩展到 128K~1M 量级——听起来很大，但一次真实任务（长对话 + 检索资料 + 工具结果）会很快把它填满。</p>
+
+  <h3>上下文里都有什么</h3>
+  <table>
+    <tr><th>组成部分</th><th>来源</th></tr>
+    <tr><td>系统提示（System Prompt）</td><td>产品或 Skill 注入的角色设定、规则、工具说明</td></tr>
+    <tr><td>对话历史</td><td>本次会话中你来我往的所有消息</td></tr>
+    <tr><td>附件与检索内容</td><td>上传的文档、RAG 检索到的片段、Skill 正文</td></tr>
+    <tr><td>工具定义与工具结果</td><td>Agent 调用工具后回传的观察结果</td></tr>
+  </table>
+  <p class="note">Anthropic 官方课程的表述：上下文是"每一次模型调用的输入"，包括系统提示、消息历史、工具定义与结果、附件与 Skill、思考块——输入按 token 计费，输出同样计费；窗口一旦填满，请求就失败。</p>
+
+  <h3>注意力：一切"同时被看"，但权重不同</h3>
+  <p>Transformer 的注意力机制对上下文中所有 token 同时分配权重，由<b>相关性和位置</b>决定强弱——不是"读到哪算哪"。这带来两个重要现象：</p>
+  <ul>
+    <li><b>Lost in the middle</b>：斯坦福团队的实验表明，关键信息位于上下文开头或结尾时模型表现最好，位于中部时显著变差（U 形曲线）；极端情况下，关键文档放在中间的表现甚至<b>不如不给文档</b>。专为长上下文设计的模型同样存在此现象。</li>
+    <li><b>上下文腐烂（context rot）</b>：随着进入上下文的 token 增多，模型准确回忆信息的能力单调下降——更多材料反而互相稀释注意力。</li>
+  </ul>
+
+  <h3>三种"知识"的对比</h3>
+  <table>
+    <tr><th></th><th>训练权重</th><th>上下文</th><th>外部存储</th></tr>
+    <tr><td>存的是什么</td><td>预训练学到的知识</td><td>本次任务的指令与材料</td><td>文件、向量库、记忆工具</td></tr>
+    <tr><td>生命周期</td><td>固化，难以即时更新</td><td>本次调用生效，会话结束即消失</td><td>持久保存</td></tr>
+    <tr><td>进入方式</td><td>训练时写入</td><td>随请求直接携带</td><td>按需检索进上下文</td></tr>
+  </table>
+
+  <h3>上下文工程：把上下文当稀缺资源经营</h3>
+  <p>Anthropic 把"上下文工程"定义为在推理全程持续维护"最小的高信号 token 集合"。常用策略：</p>
+  <ul>
+    <li><b>压缩（compaction）</b>：把冗长历史总结成精炼摘要，腾出空间</li>
+    <li><b>结构化笔记</b>：把关键状态写成结构化文件，按需回读</li>
+    <li><b>子 Agent 隔离</b>：让子任务在独立上下文中完成，只把结论带回主上下文</li>
+    <li><b>按需检索（just-in-time）</b>：平时只保存轻量索引（文件路径、链接），用到时再加载</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">5</span>应用场景：生成这份资料的过程本身</h2>
+  <p>写这份学习资料时，AI 的"桌面"上需要同时放着：作业要求、SKILL.md 的流程、多篇检索结果。如果把来源全文（数万字）全部摊上桌，既挤占空间又稀释注意力——所以本仓库的 Skill 在设计时就规定"<b>验证链接、提炼要点、来源只留清单</b>"，这正是上下文工程里"最小高信号集合"的思路。</p>
+  <p>另一个我亲历的现象：长对话进行到后期，AI 开始忘记早期约定、重复确认已经说过的事——那不是模型"坏了"，而是桌面被历史堆满，早期指令被挤到了注意力边缘。对策同样是上下文工程：总结压缩旧对话、把重要状态写进外部文件按需读取。</p>
+</section>
+
+<section>
+  <h2><span class="no">6</span>概念辨析与边界</h2>
+  <table>
+    <tr><th>容易混淆的说法</th><th>澄清</th></tr>
+    <tr><td><b>"窗口大 = 记忆好"</b></td><td>窗口是"单次能看多少"，不是"跨会话记住多少"。新会话 = 空桌面，之前的一切不会自动出现</td></tr>
+    <tr><td><b>上下文 = 训练知识</b></td><td>一个临时（本次调用），一个固化（权重里）。模型会背唐诗靠训练；记得我刚说的名字靠上下文</td></tr>
+    <tr><td><b>塞满 = 更好</b></td><td>上下文越长，回忆准确率越低（context rot），中部信息还容易被忽略。有效信息密度比长度重要</td></tr>
+    <tr><td><b>RAG / 记忆工具 = 上下文</b></td><td>它们是"往桌上递材料"的手段；递进来的部分才成为上下文</td></tr>
+  </table>
+  <h3>使用边界</h3>
+  <ul>
+    <li>token 是计费单位：上下文越长，成本越高、延迟越大——"够用的最小集合"优于"全部塞进去"</li>
+    <li>窗口有硬上限：填满即失败，长任务必须主动管理（压缩、外置、隔离）</li>
+    <li>位置敏感：关键指令和关键材料应放在上下文的<b>开头或结尾</b>，别埋在中间</li>
+  </ul>
+</section>
+
+<section>
+  <h2><span class="no">7</span>自测</h2>
+  <p class="q">1.（简答）为什么新开对话后 AI 不记得之前的内容？</p>
+  <details><summary>参考答案</summary><p>模型的"记忆"只存在于上下文中，而每次调用相互独立；新会话的上下文为空，训练权重里也没有这段对话。</p></details>
+  <p class="q">2.（名词解释）"Lost in the middle" 指什么现象？</p>
+  <details><summary>参考答案</summary><p>关键信息位于长上下文中部时，模型表现显著差于位于开头/结尾（U 形曲线）；该现象在专为长上下文设计的模型上同样存在。</p></details>
+  <p class="q">3.（选择）以下哪项<b>不属于</b>上下文的组成部分？　A. 系统提示　B. 对话历史　C. 模型的训练数据　D. 工具返回结果</p>
+  <details><summary>参考答案</summary><p>C。训练数据在预训练时固化进权重，不随每次请求进入上下文。</p></details>
+  <p class="q">4.（判断）把整本教科书贴进对话，AI 的回答一定更准确。</p>
+  <details><summary>参考答案</summary><p>错。超长上下文带来注意力稀释与中部信息丢失，且成本高；正确做法是检索关键部分按需提供。</p></details>
+</section>
+
+<section>
+  <h2><span class="no">8</span>参考来源（均经检索验证）</h2>
+  <ol>
+    <li><span class="badge">官方工程博客</span><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents">Effective context engineering for AI agents — Anthropic</a><br>提出"上下文是边际收益递减的稀缺资源"、context rot 与压缩/结构化笔记/子 Agent 三大策略。</li>
+    <li><span class="badge">原始论文</span><a href="https://arxiv.org/abs/2307.03172">Lost in the Middle: How Language Models Use Long Contexts — Nelson F. Liu 等（斯坦福，TACL 2024）</a><br>U 形位置偏差的实证研究：中间信息最容易被忽略。</li>
+    <li><span class="badge">官方课程</span><a href="https://academy.claude.com/courses/claude-platform-101/context-management">Context management · Claude Platform 101 — Anthropic</a><br>上下文的构成清单与四种管理模式（按需检索、压缩、缓存、记忆工具）。</li>
+  </ol>
+</section>
+
+<footer>
+  本资料由 <b>concept-learning Skill</b> 按其固定流程生成初稿（来源经检索验证）· 作者人工核查与修改记录见仓库 README ｜ concept-learning-lab
+</footer>
+
+</div>
+</body>
+</html>
