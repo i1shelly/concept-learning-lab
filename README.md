@@ -85,9 +85,12 @@ concept-learning-lab/
 **提交历史（远端）**：
 
 ```
+10a26445  docs: README 补充推送过程记录（GFW 与沙箱 git 黑名单下的 API push 方案）
 01835291  docs: 用 concept-learning Skill 生成三份概念学习资料与概念关系说明
 e27c88c1  feat: 添加项目级 Skill concept-learning 与仓库基础文件
 ```
+
+> 本地 HEAD 与远端 SHA 略有差异（commit 对象哈希受 author 日期字符串影响；blob/tree SHA 因为纯内容寻址所以完全一致）。作业交付以远端为准，本地可随时 `git pull` 同步远端 commit 历史。
 
 ## 安全说明
 
