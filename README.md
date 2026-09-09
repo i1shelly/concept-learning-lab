@@ -82,7 +82,7 @@ concept-learning-lab/
 3. 本地 → 远端的 **blob/tree SHA 完全一致**（内容寻址，纯函数）
 4. 本地 → 远端的 **commit SHA 略有差异**（`9cac5e6 → e27c88c1`，`82c6fc0 → 01835291`）——原因是 GitHub API 对 author/committer 日期字符串做了微调，导致 commit 对象哈希前几位不同，但 commit message / tree / parent / 作者完全一致，对作业交付无影响
 
-**提交历史（远端）**：
+**提交历史（远端，截至本文档本次提交）**：
 
 ```
 10a26445  docs: README 补充推送过程记录（GFW 与沙箱 git 黑名单下的 API push 方案）
@@ -91,6 +91,8 @@ e27c88c1  feat: 添加项目级 Skill concept-learning 与仓库基础文件
 ```
 
 > 本地 HEAD 与远端 SHA 略有差异（commit 对象哈希受 author 日期字符串影响；blob/tree SHA 因为纯内容寻址所以完全一致）。作业交付以远端为准，本地可随时 `git pull` 同步远端 commit 历史。
+>
+> 完整 commit 历史（含 README 后续微调）以 GitHub 页面为准：<https://github.com/i1shelly/concept-learning-lab/commits/main>
 
 ## 安全说明
 
